@@ -1,2 +1,2 @@
 # Final-project
-API project, music artists, locations and sales
+API project, makeup brands, pricing, items and sales
