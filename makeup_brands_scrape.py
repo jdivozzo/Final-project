@@ -13,6 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import time
+import os
+import json
 
 def scrape_data():
     options = Options()
@@ -67,4 +69,13 @@ def scrape_data():
     print("Scraped Data:", data_list)
     return data_list
 
-scrape_data()
+#scrape_data()
+
+def write_data_json_file():
+    dir = os.path.dirname(__file__) + os.sep
+    out_file = open(os.path.join(dir, 'brand_ranking_data.json'),'w')
+    data = scrape_data()
+    out_file.write(json.dumps(data, indent=4))
+    out_file.close()
+
+write_data_json_file()
