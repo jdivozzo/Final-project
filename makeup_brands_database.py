@@ -24,8 +24,8 @@ def insert_data(data_list):
     try:
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
-
-        cursor.executemany("INSERT INTO scraped_data (title, rank) VALUES (?, ?)", data_list)
+        for brand in data_list:
+            cursor.executemany("INSERT INTO scraped_data (title, rank) VALUES (?, ?)", brand)
         conn.commit()
     except sqlite3.Error as e:
         print(f"Database error: {e}")
