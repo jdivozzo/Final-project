@@ -13,7 +13,7 @@ def main():
     create_table()  # Ensure table exists
     data = scrape_data()  # Scrape data
     
-    if data:
+    if len(data) > 0:
         insert_data(data)
         print("Data successfully inserted into the database!")
     else:
