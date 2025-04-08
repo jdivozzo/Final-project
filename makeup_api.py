@@ -73,6 +73,7 @@ def get_makeup_data(db_file,names):
         #for example http://makeup-api.herokuapp.com/api/v1/products.json?brand=covergirl&product_type=foundation
 
     return data_list
+
 def create_table_makeup(db_file,data_list):
     try:
         conn = sqlite3.connect(db_file)
@@ -85,7 +86,7 @@ def create_table_makeup(db_file,data_list):
             price INTEGER
         )
         """)
-        cursor.executemany("INSERT INTO Item_prices (title, rank) VALUES (?, ?, ?)", data_list)
+        cursor.executemany("INSERT INTO Item_prices (title, rank, price) VALUES (?, ?, ?)", data_list)
         conn.commit()
     except sqlite3.Error as e:
         print(f"Database error: {e}")

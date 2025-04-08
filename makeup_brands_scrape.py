@@ -15,60 +15,61 @@ from bs4 import BeautifulSoup
 import time
 import os
 import json
-from makeup_api import create_brand_list
+import re
 
 
 def scrape_data():
     options = Options()
-    options.add_argument("--headless")  # Runs in background (no UI)
+    options.add_argument("--headless")  
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920x1080")
 
-    # Setup Chrome WebDriver
+    # setup Chrome WebDriver
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
 
     url = "https://wwd.com/lists/top-cosmetic-companies-2023-1236299225/"
     driver.get(url)
 
-    # Scroll to load all elements
+    # scroll to load all elements
     last_height = driver.execute_script("return document.body.scrollHeight")
 
     while True:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(3)  # Wait for new content to load
+        time.sleep(3)  # wait for new content to load
 
         new_height = driver.execute_script("return document.body.scrollHeight")
         if new_height == last_height:
-            break  # Stop if no new content is loaded
+            break  # stop if no new content is loaded
         last_height = new_height
 
-    # Get fully rendered HTML
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-    driver.quit()  # Close browser
+    driver.quit()  
 
-    # Debug: Print a portion of the page source to check structure
     print(soup.prettify()[:2000])  # Print first 2000 characters
 
-    # Locate brand elements
-    brands = soup.find_all("article", class_="c-gallery-vertical-album")  # Update class if necessary
+    brands = soup.find_all("article", class_="c-gallery-vertical-album") 
 
     if not brands:
         print("No brand elements found. The class might be incorrect.")
 
     data_list = []
     for i in range(len(brands)):
-        equivalent = create_brand_list()
         title_tag = brands[i].find("h2", class_="c-gallery-vertical-album__title")
         rank_tag = brands[i].find("span", class_="c-gallery-vertical-album__number")
+        networth_tag = brands[i].find("div", class_="c-gallery-vertical-album__description")
 
-        if title_tag and rank_tag:
+        if title_tag and rank_tag and networth_tag:
 
             title = title_tag.text.strip()
             rank = rank_tag.text.strip()
-            data_list.append((title, rank, equivalent[i]))
+            networth_text = networth_tag.text.strip()
+            match = re.search(r"\$\d{1,3}(?:,\d{3})*(?:\.\d+)?(?:\s*(?:Billion|Million))?", networth_text)
+            networth = match.group(0)
+
+            data_list.append((title, rank, networth))
         else:
-            print("Skipping a brand due to missing title or rank.")
+            print("Skipping a brand due to missing title or rank or networth.")
 
     print("Scraped Data:", data_list)
     return data_list

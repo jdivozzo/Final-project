@@ -11,25 +11,24 @@ def create_table():
             CREATE TABLE IF NOT EXISTS scraped_data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT VARCHAR(255),
-            rank TEXT
+            rank TEXT,
+            networth TEXT
         )
         """)
 
         conn.commit()
     except sqlite3.Error as e:
-         print(f"Database error: {e}")
+         print(f"Database error1: {e}")
     finally:
         conn.close()
 
 def insert_data(data_list):
-    for data in data_list:
-        data = data.append("api equivalent")
     try:
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor() 
-        cursor.executemany("INSERT INTO scraped_data (title, rank, api equivalent) VALUES (?, ?, ?)", data_list)
+        cursor.executemany("INSERT INTO scraped_data (title, rank, networth) VALUES (?, ?, ?)", data_list)
         conn.commit()
     except sqlite3.Error as e:
-        print(f"Database error: {e}")
+        print(f"Database error2: {e}")
     finally:
         conn.close()

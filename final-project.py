@@ -12,6 +12,7 @@ from makeup_brands_database import create_table, insert_data
 def main():
     create_table()  # Ensure table exists
     data = scrape_data()  # Scrape data
+    insert_data(data)
     
     if len(data) > 0:
         insert_data(data)
