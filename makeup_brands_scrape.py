@@ -15,6 +15,8 @@ from bs4 import BeautifulSoup
 import time
 import os
 import json
+from makeup_api import create_brand_list
+
 
 def scrape_data():
     options = Options()
@@ -55,14 +57,16 @@ def scrape_data():
         print("No brand elements found. The class might be incorrect.")
 
     data_list = []
-    for brand in brands:
-        title_tag = brand.find("h2", class_="c-gallery-vertical-album__title")
-        rank_tag = brand.find("span", class_="c-gallery-vertical-album__number")
+    for i in range(len(brands)):
+        equivalent = create_brand_list()
+        title_tag = brands[i].find("h2", class_="c-gallery-vertical-album__title")
+        rank_tag = brands[i].find("span", class_="c-gallery-vertical-album__number")
 
         if title_tag and rank_tag:
+
             title = title_tag.text.strip()
             rank = rank_tag.text.strip()
-            data_list.append((title, rank))
+            data_list.append((title, rank, equivalent[i]))
         else:
             print("Skipping a brand due to missing title or rank.")
 
