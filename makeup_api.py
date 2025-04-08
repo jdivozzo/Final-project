@@ -30,6 +30,11 @@ def create_brand_list(fname):
        data.append(line.strip()) 
     fhand.close()
     return data
+def replace_vow(string, let,brand):
+    for val in string:
+        brand = brand.replace(val,let)
+    return brand
+
 
 def get_makeup_data(db_file,names):
     data_list = []
@@ -43,19 +48,30 @@ def get_makeup_data(db_file,names):
     brand_rank = cur.fetchall()
     for data in brand_rank:
         brand = data[1].lower()
+        str_e = "èéêëěẽēėę"
+        str_i = "èéêëěẽēėę"
+        str_a = "àáâäǎæãåā"
+        str_o = "òóôöǒœøõō"
+        str_u = "ùúûüǔũūűů"
+        brand = replace_vow(str_e,"e",brand)
+        brand = replace_vow(str_i,"i",brand)
+        brand = replace_vow(str_a,"a",brand)
+        brand = replace_vow(str_o,"o",brand)
+        brand = replace_vow(str_u,"u",brand)
         for name in names:
             #print(name)
             if name in brand:
                 brand = name
                 print(brand)
         responce = requests.get(base_url+f"brand={brand}")
-        print(responce.status_code)
-        if responce.status_code == 200:
+        #print(responce.status_code)
+        if responce.status_code == 200 and responce.text != []:
             print(responce.url)
             data = responce.text
             print(data)
         #need to loop through the data for each brand to store each blush,mascara,and foundations price
         #for example http://makeup-api.herokuapp.com/api/v1/products.json?brand=covergirl&product_type=foundation
+
     return data_list
 def create_table_makeup(db_file,data_list):
     try:
