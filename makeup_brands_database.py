@@ -12,7 +12,7 @@ def create_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT VARCHAR(255) UNIQUE,
             rank TEXT,
-            networth TEXT
+            sales TEXT
         )
         """)
 
@@ -26,7 +26,7 @@ def insert_data(data_list):
     try:
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor() 
-        cursor.executemany("INSERT OR IGNORE INTO scraped_data (title, rank, networth) VALUES (?, ?, ?)", data_list)
+        cursor.executemany("INSERT OR IGNORE INTO scraped_data (title, rank, sales) VALUES (?, ?, ?)", data_list)
         conn.commit()
     except sqlite3.Error as e:
         print(f"Database error2: {e}")

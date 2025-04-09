@@ -57,20 +57,20 @@ def scrape_data():
     for i in range(len(brands)):
         title_tag = brands[i].find("h2", class_="c-gallery-vertical-album__title")
         rank_tag = brands[i].find("span", class_="c-gallery-vertical-album__number")
-        networth_tag = brands[i].find("div", class_="c-gallery-vertical-album__description")
+        sales_tag = brands[i].find("div", class_="c-gallery-vertical-album__description")
 
-        if title_tag and rank_tag and networth_tag:
+        if title_tag and rank_tag and sales_tag:
 
             title = title_tag.text.strip()
             rank = rank_tag.text.strip()
-            networth_text = networth_tag.text.strip()
-            match = re.search(r"\$\d{1,3}(?:,\d{3})*(?:\.\d+)?(?:\s*(?:Billion|Million))?", networth_text)
-            networth = match.group(0)
-            print("networth: {networth}")
+            sales_text = sales_tag.text.strip()
+            match = re.search(r"\$\d{1,3}(?:,\d{3})*(?:\.\d+)?(?:\s*(?:Billion|Million))?", sales_text)
+            sales = match.group(0)
+            print("sales: {sales}")
 
-            data_list.append((title, rank, networth))
+            data_list.append((title, rank, sales))
         else:
-            print("Skipping a brand due to missing title or rank or networth.")
+            print("Skipping a brand due to missing title or rank or sales.")
 
     print("Scraped Data:", data_list)
     return data_list
