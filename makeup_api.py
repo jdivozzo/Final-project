@@ -1,7 +1,7 @@
 import requests
 import sqlite3
 import os
-#import json
+import json
 def create_table_kinds_makeup(db_file):
     try:
         conn = sqlite3.connect(db_file)
@@ -10,7 +10,7 @@ def create_table_kinds_makeup(db_file):
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS Makeup_types (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT VARCHAR(255)
+            title TEXT UNIQUE)
         )
         """)
         cursor.execute("INSERT OR IGNORE INTO Makeup_types (title) VALUES (?)", ("Blush",))
@@ -30,6 +30,7 @@ def create_brand_list(fname):
        data.append(line.strip()) 
     fhand.close()
     return data
+
 def replace_vow(string, let,brand):
     for val in string:
         brand = brand.replace(val,let)
@@ -44,8 +45,11 @@ def get_makeup_data(db_file,names):
         cur = conn.cursor()
     except sqlite3.Error as e:
          print(f"Database error: {e}")
+         
     cur.execute('''SELECT * FROM scraped_data''')
     brand_rank = cur.fetchall()
+    conn.close() 
+    print(brand_rank)
     for data in brand_rank:
         brand = data[1].lower()
         str_e = "èéêëěẽēėę"
@@ -53,6 +57,7 @@ def get_makeup_data(db_file,names):
         str_a = "àáâäǎæãåā"
         str_o = "òóôöǒœøõō"
         str_u = "ùúûüǔũūűů"
+        brand = brand.replace("`","'")
         brand = replace_vow(str_e,"e",brand)
         brand = replace_vow(str_i,"i",brand)
         brand = replace_vow(str_a,"a",brand)
@@ -62,16 +67,18 @@ def get_makeup_data(db_file,names):
             #print(name)
             if name in brand:
                 brand = name
-                print(brand)
+                #print(brand)
         responce = requests.get(base_url+f"brand={brand}")
         #print(responce.status_code)
-        if responce.status_code == 200 and responce.text != []:
-            print(responce.url)
-            data = responce.text
-            print(data)
+        if responce.status_code == 200:
+            data = json.loads(responce.text)
+            #print(data)
+            # if len(data) > 0:
+            #     print(data[0]["brand"])
+            #     print(responce.url)
+            #     print(data)
         #need to loop through the data for each brand to store each blush,mascara,and foundations price
         #for example http://makeup-api.herokuapp.com/api/v1/products.json?brand=covergirl&product_type=foundation
-
     return data_list
 
 def create_table_makeup(db_file,data_list):
@@ -97,4 +104,4 @@ db_file = "brand_data.db"
 create_table_kinds_makeup(db_file)
 data = create_brand_list('brand_list.txt')
 data_list = get_makeup_data(db_file,data)
-create_table_makeup(db_file,data_list)
+#create_table_makeup(db_file,data_list)
