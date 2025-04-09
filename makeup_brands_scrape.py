@@ -66,6 +66,7 @@ def scrape_data():
             networth_text = networth_tag.text.strip()
             match = re.search(r"\$\d{1,3}(?:,\d{3})*(?:\.\d+)?(?:\s*(?:Billion|Million))?", networth_text)
             networth = match.group(0)
+            print("networth: {networth}")
 
             data_list.append((title, rank, networth))
         else:
