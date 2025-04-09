@@ -2,19 +2,19 @@ import requests
 import sqlite3
 import os
 import json
-def create_table_kinds_makeup(db_file):
+def create_table_kinds_makeup(db_file, lst):
     try:
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
 
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS Makeup_types (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT VARCHAR(255) UNIQUE)
+            type_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            type TEXT VARCHAR(255) UNIQUE)
         """)
-        cursor.execute("INSERT OR IGNORE INTO Makeup_types (title) VALUES (?)", ("Blush",))
-        cursor.execute("INSERT OR IGNORE INTO Makeup_types (title) VALUES (?)", ("Foundation",))
-        cursor.execute("INSERT OR IGNORE INTO Makeup_types (title) VALUES (?)", ("Mascara",))
+        conn.commit()
+        for kind in lst:
+            cursor.execute("INSERT OR IGNORE INTO Makeup_types (type) VALUES (?)", (kind,))
         conn.commit()
     except sqlite3.Error as e:
         print(f"Database error: {e}")
@@ -56,7 +56,7 @@ def get_makeup_data(db_file,names):
         str_a = "àáâäǎæãåā"
         str_o = "òóôöǒœøõō"
         str_u = "ùúûüǔũūűů"
-        brand = brand.replace("`","'")
+        brand = brand.replace("’","'")
         brand = replace_vow(str_e,"e",brand)
         brand = replace_vow(str_i,"i",brand)
         brand = replace_vow(str_a,"a",brand)
@@ -70,37 +70,59 @@ def get_makeup_data(db_file,names):
         responce = requests.get(base_url+f"brand={brand}")
         #print(responce.status_code)
         if responce.status_code == 200:
-            data = json.loads(responce.text)
+            data_j = json.loads(responce.text)
             #print(data)
-            # if len(data) > 0:
-            #     print(data[0]["brand"])
-            #     print(responce.url)
-            #     print(data)
+            if len(data_j) > 0:
+                # print(data_j[0])
+                # print(data_j[0]["brand"])
+                #print(responce.url)
+                # print(data_j)
+                try:
+                    conn = sqlite3.connect(db_file)
+                    cur = conn.cursor()
+                except sqlite3.Error as e:
+                    print(f"Database error: {e}")
+                    
+                cur.execute('''SELECT * FROM Makeup_types''')
+                types = cur.fetchall()
+                conn.close() 
+                for type_info in types:
+                    #print(type)
+                    type = type_info[1].lower()
+                    responce = requests.get(base_url+f"brand={brand}&product_type={type}")
+                    if responce.status_code == 200:
+                        type_data = json.loads(responce.text)
+                        if len(type_data) > 0:
+                            t_name = type_data[0]["name"]
+                            price = type_data[0]["price"]
+                            data_list.append((type_info[0],data[0],t_name,price))
+    #print(data_list)
+
         #need to loop through the data for each brand to store each blush,mascara,and foundations price
         #for example http://makeup-api.herokuapp.com/api/v1/products.json?brand=covergirl&product_type=foundation
     return data_list
 
-# def create_table_makeup(db_file,data_list):
-#     try:
-#         conn = sqlite3.connect(db_file)
-#         cursor = conn.cursor()
+def create_table_makeup(db_file,data_list):
+    try:
+        conn = sqlite3.connect(db_file)
+        cursor = conn.cursor()
 
-#         cursor.execute("""
-#             CREATE TABLE IF NOT EXISTS Item_prices (
-#             product_id INTEGER,
-#             brand_id TEXT VARCHAR(255),
-#             price INTEGER
-#         )
-#         """)
-#         cursor.executemany("INSERT INTO Item_prices (title, rank, price) VALUES (?, ?, ?)", data_list)
-#         conn.commit()
-#     except sqlite3.Error as e:
-#         print(f"Database error: {e}")
-#     finally:
-#         conn.close()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS Item_prices (
+            product_id INTEGER, brand_id TEXT INTEGER,
+            product_title TEXT VARCHAR(255) UNIQUE,
+            price TEXT
+        )
+        """)
+        cursor.executemany("INSERT OR IGNORE INTO Item_prices (product_id, brand_id,product_title, price) VALUES (?, ?, ?, ?)", data_list)
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    finally:
+        conn.close()
 
 db_file = "brand_data.db"
-create_table_kinds_makeup(db_file)
+create_table_kinds_makeup(db_file, ['Blush','Eyeliner','Bronzer','Foundation','Mascara','Eyeshadow','Lipstick','Eyebrow','Lipliner','Nail polish'])
 data = create_brand_list('brand_list.txt')
 data_list = get_makeup_data(db_file,data)
-#create_table_makeup(db_file,data_list)
+create_table_makeup(db_file,data_list)
