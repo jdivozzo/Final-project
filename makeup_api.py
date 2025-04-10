@@ -52,7 +52,7 @@ def get_makeup_data(db_file,names):
     for data in brand_rank:
         brand = data[1].lower()
         str_e = "èéêëěẽēėę"
-        str_i = "èéêëěẽēėę"
+        str_i = "ìíîïǐĩīıį"
         str_a = "àáâäǎæãåā"
         str_o = "òóôöǒœøõō"
         str_u = "ùúûüǔũūűů"
