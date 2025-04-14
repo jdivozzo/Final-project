@@ -98,7 +98,7 @@ def get_makeup_data(db_file,names):
         for name in names:
             #print(name)
             brand_split = brand.split()
-            if name in brand or brand_split[0] in name and len(brand_split[0]) > 2:
+            if name in brand or brand_split[0] in name and len(brand_split[0]) > 3:
                 brand = name
                 in_both.append(name)
                 #print(brand)
