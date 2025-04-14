@@ -35,9 +35,42 @@ def replace_vow(string, let, brand):
         brand = brand.replace(val,let)
     return brand
 
+def get_api_data(db_file, responce, base_url, brand,data_list,brand_id):
+    data_j = json.loads(responce.text)
+                #print(data)
+    if len(data_j) > 0:
+        # print(data_j[0])
+        # print(data_j[0]["brand"])
+        #print(responce.url)
+        # print(data_j)
+        try:
+            conn = sqlite3.connect(db_file)
+            cur = conn.cursor()
+        except sqlite3.Error as e:
+            print(f"Database error: {e}")
+            
+        cur.execute('''SELECT * FROM Makeup_types''')
+        types = cur.fetchall()
+        conn.close() 
+        for type_info in types:
+            #print(type)
+            type = type_info[1].lower()
+            responce = requests.get(base_url+f"brand={brand}&product_type={type}")
+            #print(responce.url)
+            if responce.status_code == 200:
+                type_data = json.loads(responce.text)
+                if len(type_data) > 0:
+                    t_name = type_data[0]["name"]
+                    price = type_data[0]["price"]
+                    if price != "0.0" and price != None:
+                        data_list.append((type_info[0],brand_id,t_name,price))
+                        #print(t_name)
+    return data_list
 
 def get_makeup_data(db_file,names):
     data_list = []
+    in_both = []
+    other_brands = []
     base_url = 'http://makeup-api.herokuapp.com/api/v1/products.json?'
     try:
         conn = sqlite3.connect(db_file)
@@ -64,38 +97,27 @@ def get_makeup_data(db_file,names):
         brand = replace_vow(str_u,"u",brand)
         for name in names:
             #print(name)
-            if name in brand:
+            brand_split = brand.split()
+            if name in brand or brand_split[0] in name and len(brand_split[0]) > 2:
                 brand = name
+                in_both.append(name)
                 #print(brand)
         responce = requests.get(base_url+f"brand={brand}")
         #print(responce.status_code)
         if responce.status_code == 200:
-            data_j = json.loads(responce.text)
-            #print(data)
-            if len(data_j) > 0:
-                # print(data_j[0])
-                # print(data_j[0]["brand"])
-                #print(responce.url)
-                # print(data_j)
-                try:
-                    conn = sqlite3.connect(db_file)
-                    cur = conn.cursor()
-                except sqlite3.Error as e:
-                    print(f"Database error: {e}")
-                    
-                cur.execute('''SELECT * FROM Makeup_types''')
-                types = cur.fetchall()
-                conn.close() 
-                for type_info in types:
-                    #print(type)
-                    type = type_info[1].lower()
-                    responce = requests.get(base_url+f"brand={brand}&product_type={type}")
-                    if responce.status_code == 200:
-                        type_data = json.loads(responce.text)
-                        if len(type_data) > 0:
-                            t_name = type_data[0]["name"]
-                            price = type_data[0]["price"]
-                            data_list.append((type_info[0],data[0],t_name,price))
+            data_list = get_api_data(db_file, responce, base_url, brand,data_list,data[0])
+    for name in names:
+            if name not in in_both:
+                other_brands.append(name)
+    langth = len(other_brands)
+    print(langth)
+    for i in range(langth):
+        responce = requests.get(base_url+f"brand={other_brands[i]}")
+        #print(other_brands[i])
+        #print(responce.status_code)
+        if responce.status_code == 200:
+            #print(responce.url)
+            data_list = get_api_data(db_file, responce, base_url, other_brands[i],data_list,101+i)
     #print(data_list)
 
         #need to loop through the data for each brand to store each blush,mascara,and foundations price
