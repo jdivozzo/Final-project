@@ -16,7 +16,7 @@ def get_plot_data(db_file):
     for item in db_data:
         table_data[item[2]] = table_data.get(item[2], [])
         table_data[item[2]].append((item[0].split()[0],item[1],float(item[3])))
-    print(table_data['Lipstick'])
+    #print(table_data['Lipstick'])
     return table_data
 
 def create_visual(table_data):
@@ -46,29 +46,32 @@ def create_visual(table_data):
     by = []
     bx = []
     #blush = sorted(table_data["Blush"], key = lambda t: t[2], reverse = True)
+    table_data["Blush"].reverse()
     blush = table_data["Blush"]
-    print(blush)
+    #print(blush)
     for val in blush:
         by.append(val[2])
         bx.append(val[0])
     ey = []
     ex = []
     #eyeliner = sorted(table_data["Eyeliner"], key = lambda t: t[2], reverse = True)
+    table_data["Eyeliner"].reverse()
     eyeliner = table_data["Eyeliner"]
-    print(eyeliner)
+    #print(eyeliner)
     for val in eyeliner:
         ey.append(val[2])
         ex.append(val[0])
     fy = []
     fx = []
     #foundation = sorted(table_data["Foundation"], key = lambda t: t[2], reverse = True)
+    table_data["Foundation"].reverse()
     foundation = table_data["Foundation"]
-    print(foundation)
+    #print(foundation)
     for val in foundation:
         fy.append(val[2])
         fx.append(val[0])
 
-    colors = ['grey','blue','orange']
+    colors = ['orange','blue','grey']
     ax_b.bar(bx,by, color=colors)
     ax_e.bar(ex,ey, color=colors)
     ax_f.bar(fx,fy, color=colors)
@@ -78,6 +81,7 @@ def create_visual(table_data):
     ax_f.set_ylim(0, 25)
 
     # Show the plot
+    plt.suptitle('Makeup Brand Prices by Rank')
     plt.tight_layout(pad=1.5)
     fig.savefig("price_for_each_brand.png")
     plt.show()
