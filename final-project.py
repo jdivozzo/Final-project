@@ -32,7 +32,7 @@ def main():
         print("No data to insert.")
     
     db_file = "brand_data.db"
-    db_data = get_data(db_file)
+    db_data = get_data(db_file,db_file)
     di = calculate(db_data)
     write_txt(di)
 
