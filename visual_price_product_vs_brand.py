@@ -81,10 +81,12 @@ def create_visual(table_data):
     ax_f.set_ylim(0, 25)
 
     # Show the plot
-    plt.suptitle('Makeup Brand Prices by Rank')
+    plt.suptitle('Makeup Brand Prices by Rank',fontsize='large')
     plt.tight_layout(pad=1.5)
     fig.savefig("price_for_each_brand.png")
     plt.show()
 
 
-
+# db_file = "brand_data.db"
+# table_data = get_plot_data(db_file)
+# create_visual(table_data)

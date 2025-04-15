@@ -98,7 +98,7 @@ def get_makeup_data(db_file,names):
         for name in names:
             #print(name)
             brand_split = brand.split()
-            if name in brand or brand_split[0] in name and len(brand_split[0]) > 3:
+            if name in brand or (brand_split[0] in name and len(brand_split[0]) > 3):
                 brand = name
                 in_both.append(name)
                 #print(brand)
@@ -148,8 +148,8 @@ def create_table_makeup(db_file,data_list):
     finally:
         conn.close()
 
-# db_file = "brand_data.db"
-# create_table_kinds_makeup(db_file, ['Blush','Eyeliner','Bronzer','Foundation','Mascara','Eyeshadow','Lipstick','Eyebrow','Lipliner','Nail polish'])
-# data = create_brand_list('brand_list.txt')
-# data_list = get_makeup_data(db_file,data)
-# create_table_makeup(db_file,data_list)
+db_file = "brand_data.db"
+create_table_kinds_makeup(db_file, ['Blush','Eyeliner','Bronzer','Foundation','Mascara','Eyeshadow','Lipstick','Eyebrow','Lipliner','Nail polish'])
+data = create_brand_list('brand_list.txt')
+data_list = get_makeup_data(db_file,data)
+create_table_makeup(db_file,data_list)

@@ -2,7 +2,3 @@ Name: L’Oréal Sales: $44.53 Billion Average Price per product: 16.5525
 
 Name: Revlon Group Holdings LLC Sales: $2.1 Billion Average Price per product: 13.24
 
-Name: E.l.f. Beauty Sales: $890 Million Average Price per product: 7.41857142857143
-
-Name: Burt’s Bees Sales: $379 Million Average Price per product: 9.99
-
