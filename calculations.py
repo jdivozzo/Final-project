@@ -2,7 +2,7 @@
 import sqlite3
 import os
 
-def get_data(db_data):
+def get_data(db_data,db_file):
     try:
         conn = sqlite3.connect(db_file)
         cur = conn.cursor()
