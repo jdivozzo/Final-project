@@ -13,7 +13,6 @@ from calculations import get_data, calculate, write_txt
 def main():
     create_table()  # Ensure table exists
     data = scrape_data()  # Scrape data
-    insert_data(data)
     
     if len(data) > 0:
         insert_data(data)
