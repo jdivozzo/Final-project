@@ -26,7 +26,14 @@ def insert_data(data_list):
     try:
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor() 
-        cursor.executemany("INSERT OR IGNORE INTO scraped_data (title, rank, sales) VALUES (?, ?, ?)", data_list)
+        new_inserts = 0
+        for data in data_list:
+            cursor.execute("INSERT OR IGNORE INTO scraped_data (title, rank, sales) VALUES (?, ?, ?)", (data[0], data[1], data[2],))
+            if cursor.rowcount == 1:
+                new_inserts += 1
+            if new_inserts >= 25:
+                break
+        print(cursor.lastrowid)
         conn.commit()
     except sqlite3.Error as e:
         print(f"Database error2: {e}")

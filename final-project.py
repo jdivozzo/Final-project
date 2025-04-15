@@ -7,7 +7,6 @@
 
 from makeup_brands_scrape import scrape_data
 from makeup_brands_database import create_table, insert_data
-from visualizations import plot_data, get_data_from_db, clean_data
 from makeup_api import create_table_kinds_makeup, create_brand_list, get_makeup_data,create_table_makeup
 
 def main():
@@ -32,6 +31,7 @@ def main():
         print("No data to insert.")
     
 
+    from visualizations import plot_data, get_data_from_db, clean_data
 
     raw_data = get_data_from_db()
     cleaned_data = clean_data(raw_data)

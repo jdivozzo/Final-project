@@ -110,7 +110,6 @@ def get_makeup_data(db_file,names):
             if name not in in_both:
                 other_brands.append(name)
     langth = len(other_brands)
-    print(langth)
     for i in range(langth):
         responce = requests.get(base_url+f"brand={other_brands[i]}")
         #print(other_brands[i])
@@ -136,7 +135,13 @@ def create_table_makeup(db_file,data_list):
             price TEXT
         )
         """)
-        cursor.executemany("INSERT OR IGNORE INTO Item_prices (product_id, brand_id,product_title, price) VALUES (?, ?, ?, ?)", data_list)
+        new_inserts = 0
+        for data in data_list:
+            cursor.execute("INSERT OR IGNORE INTO Item_prices (product_id, brand_id,product_title, price) VALUES (?, ?, ?, ?)", (data[0], data[1], data[2], data[3],))
+            if cursor.rowcount == 1:
+                new_inserts += 1
+            if new_inserts >= 25:
+                break
         conn.commit()
     except sqlite3.Error as e:
         print(f"Database error: {e}")
