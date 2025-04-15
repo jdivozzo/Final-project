@@ -8,6 +8,7 @@
 from makeup_brands_scrape import scrape_data
 from makeup_brands_database import create_table, insert_data
 from makeup_api import create_table_kinds_makeup, create_brand_list, get_makeup_data,create_table_makeup
+from calculations import get_data, calculate, write_txt
 
 def main():
     create_table()  # Ensure table exists
@@ -30,13 +31,20 @@ def main():
     else:
         print("No data to insert.")
     
+    db_file = "brand_data.db"
+    db_data = get_data(db_file)
+    di = calculate(db_data)
+    write_txt(di)
 
-    from visualizations import plot_data, get_data_from_db, clean_data
-
+    from visualizations import get_data_from_db,clean_data,plot_data
     raw_data = get_data_from_db()
     cleaned_data = clean_data(raw_data)
     plot_data(cleaned_data)
 
+    from visual_price_product_vs_brand import get_plot_data, create_visual
+    db_file = "brand_data.db"
+    table_data = get_plot_data(db_file)
+    create_visual(table_data)
     
     
 

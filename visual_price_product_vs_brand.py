@@ -88,6 +88,3 @@ def create_visual(table_data):
 
 
 
-db_file = "brand_data.db"
-table_data = get_plot_data(db_file)
-create_visual(table_data)
