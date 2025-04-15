@@ -53,12 +53,13 @@ def plot_data(data_list):
     titles = [item[0] for item in data_list]
     sales = [item[2] for item in data_list]
     plt.rcParams.update({'font.size': 6}) # Set font size to 14
-    plt.figure(figsize=(12, 6))
+    fig = plt.figure(figsize=(12, 6))
     plt.barh(titles, sales, color='blue')
     plt.xlabel('Sales (in billions)')
     plt.title('Makeup Brand Sales by Rank')
     plt.gca().invert_yaxis()  # highest rank at the top
     plt.tight_layout()
+    fig.savefig("Brands_by_rank")
     plt.show()
 
 

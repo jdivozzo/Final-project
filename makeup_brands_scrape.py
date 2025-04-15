@@ -65,7 +65,6 @@ def scrape_data():
             sales_text = sales_tag.text.strip()
             match = re.search(r"\$\d{1,3}(?:,\d{3})*(?:\.\d+)?(?:\s*(?:Billion|Million))?", sales_text)
             sales = match.group(0)
-            print("sales: {sales}")
 
             data_list.append((title, rank, sales))
         else:

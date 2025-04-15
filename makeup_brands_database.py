@@ -33,7 +33,6 @@ def insert_data(data_list):
                 new_inserts += 1
             if new_inserts >= 25:
                 break
-        print(cursor.lastrowid)
         conn.commit()
     except sqlite3.Error as e:
         print(f"Database error2: {e}")
