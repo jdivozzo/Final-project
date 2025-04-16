@@ -52,8 +52,8 @@ def plot_data(data_list):
     data_list = sorted(data_list, key=lambda x: x[1])  # confirm sorted by rank
     titles = [item[0] for item in data_list]
     sales = [item[2] for item in data_list]
-    plt.rcParams.update({'font.size': 6}) # Set font size to 14
-    fig = plt.figure(figsize=(12, 6))
+    plt.rcParams.update({'font.size': 5}) # Set font size to 14
+    fig = plt.figure(figsize=(12, 8))
     plt.barh(titles, sales, color='blue')
     plt.xlabel('Sales (in billions)')
     plt.title('Makeup Brand Sales by Rank')
