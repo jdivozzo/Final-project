@@ -1,4 +1,6 @@
 Name: L’Oréal Sales: $44.53 Billion Average Price per product: 16.5525
+Average Price calculated from 1 Blush, 1 Eyeliner, 1 Bronzer, 1 Foundation, 1 Mascara, 1 Eyeshadow, 1 Lipstick, 1 Nail polish
 
 Name: Revlon Group Holdings LLC Sales: $2.1 Billion Average Price per product: 13.24
+Average Price calculated from 1 Blush, 1 Eyeliner, 0 Bronzer, 1 Foundation, 0 Mascara, 1 Eyeshadow, 1 Lipstick, 1 Nail polish
 
