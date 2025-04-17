@@ -63,9 +63,9 @@ def plot_data(data_list):
     plt.show()
 
 
-raw_data = get_data_from_db()
-cleaned_data = clean_data(raw_data)
-plot_data(cleaned_data)
+# raw_data = get_data_from_db()
+# cleaned_data = clean_data(raw_data)
+# plot_data(cleaned_data)
 
 
             

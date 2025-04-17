@@ -116,7 +116,7 @@ def get_makeup_data(db_file,names):
         #print(responce.status_code)
         if responce.status_code == 200:
             #print(responce.url)
-            data_list = get_api_data(db_file, responce, base_url, other_brands[i],data_list,101+i)
+            data_list = get_api_data(db_file, responce, base_url, other_brands[i],data_list,1000+i)
     #print(data_list)
 
         #need to loop through the data for each brand to store each blush,mascara,and foundations price
