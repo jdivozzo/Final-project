@@ -2,7 +2,7 @@
 import sqlite3
 import os
 
-def get_data(db_data,db_file):
+def get_data(db_file):
     try:
         conn = sqlite3.connect(db_file)
         cur = conn.cursor()
@@ -52,6 +52,6 @@ def write_txt(di):
     out_file.close()
 
 # db_file = "brand_data.db"
-# db_data = get_data(db_file,db_file)
+# db_data = get_data(db_file)
 # di = calculate(db_data)
 # write_txt(di)
