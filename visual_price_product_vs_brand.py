@@ -33,13 +33,13 @@ def create_visual(table_data):
 
     #sets up titles
 
-    ax_b.set(xlabel='Price', ylabel='Brand Names',
+    ax_b.set(xlabel='Brand Names', ylabel='Price',
     title='Blush data')
 
-    ax_e.set(xlabel='Price', ylabel='Brand Names',
+    ax_e.set(xlabel='Brand Names', ylabel='Price',
     title='Eyeliner data')
 
-    ax_f.set(xlabel='Price', ylabel='Brand Names',
+    ax_f.set(xlabel='Brand Names', ylabel='Price',
     title='Foundation data')
 
     #get data ready to plot

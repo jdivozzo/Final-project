@@ -132,12 +132,12 @@ def create_table_makeup(db_file,data_list):
             CREATE TABLE IF NOT EXISTS Item_prices (
             product_id INTEGER, brand_id TEXT INTEGER,
             product_title TEXT VARCHAR(255) UNIQUE,
-            price TEXT
+            price INTEGER
         )
         """)
         new_inserts = 0
         for data in data_list:
-            cursor.execute("INSERT OR IGNORE INTO Item_prices (product_id, brand_id,product_title, price) VALUES (?, ?, ?, ?)", (data[0], data[1], data[2], data[3],))
+            cursor.execute("INSERT OR IGNORE INTO Item_prices (product_id, brand_id,product_title, price) VALUES (?, ?, ?, ?)", (data[0], data[1], data[2], float(data[3]),))
             if cursor.rowcount == 1:
                 new_inserts += 1
             if new_inserts >= 25:
