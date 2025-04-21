@@ -44,28 +44,41 @@ def clean_data(data):
     return cleaned
 
 
-def plot_data(data_list):
+def plot_top_data(data_list):
     if not data_list:
         print("No data to plot")
         return
 
-    data_list = sorted(data_list, key=lambda x: x[1])  # confirm sorted by rank
+    data_list = sorted(data_list, key=lambda x: x[1])[:10]  # confirm sorted by rank
     titles = [item[0] for item in data_list]
     sales = [item[2] for item in data_list]
-    plt.rcParams.update({'font.size': 5}) # Set font size to 14
+    plt.rcParams.update({'font.size': 10}) # Set font size to 14
     fig = plt.figure(figsize=(12, 8))
     plt.barh(titles, sales, color='blue')
     plt.xlabel('Sales (in billions)')
-    plt.title('Makeup Brand Sales by Rank')
+    plt.title('Top Makeup Brand Sales by Rank')
     plt.gca().invert_yaxis()  # highest rank at the top
     plt.tight_layout()
-    fig.savefig("Brands_by_rank")
+    fig.savefig("Top_brands_by_rank")
     plt.show()
 
+def plot_bottom_data(data_list):
+    if not data_list:
+        print("No data to plot")
+        return
 
-# raw_data = get_data_from_db()
-# cleaned_data = clean_data(raw_data)
-# plot_data(cleaned_data)
+    bottom_data = data_list[-10:]
+    titles = [item[0] for item in bottom_data]
+    sales = [item[2] for item in bottom_data]
+    plt.rcParams.update({'font.size': 10}) # Set font size to 14
+    fig = plt.figure(figsize=(12, 8))
+    plt.barh(titles, sales, color='blue')
+    plt.xlabel('Sales (in billions)')
+    plt.title('Bottom Makeup Brand Sales by Rank')
+    plt.gca().invert_yaxis()  # highest rank at the top
+    plt.tight_layout()
+    fig.savefig("Bottom_brands_by_rank")
+    plt.show()
 
 
             

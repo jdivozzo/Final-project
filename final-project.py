@@ -35,11 +35,13 @@ def main():
     di = calculate(db_data)
     write_txt(di)
 
-    from visualizations import get_data_from_db,clean_data,plot_data
+    from visualizations import get_data_from_db,clean_data,plot_top_data,plot_bottom_data
     raw_data = get_data_from_db()
     cleaned_data = clean_data(raw_data)
-    plot_data(cleaned_data)
+    plot_top_data(cleaned_data)
+    plot_bottom_data(cleaned_data)
 
+   
     from visual_price_product_vs_brand import get_plot_data, create_visual
     db_file = "brand_data.db"
     table_data = get_plot_data(db_file)
