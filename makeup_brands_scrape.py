@@ -45,7 +45,7 @@ def scrape_data():
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()  
 
-    print(soup.prettify()[:2000])  # Print first 2000 characters
+    #print(soup.prettify()[:2000])  # Print first 2000 characters
 
     brands = soup.find_all("article", class_="c-gallery-vertical-album") 
 
